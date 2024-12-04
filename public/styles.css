@@ -3,14 +3,14 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f0f0f0;
+  background-color: #000000;
   color: #333333;
   text-align: center;
 }
 
 /* Header */
 header {
-  background-color: ##000000;
+  background-color: #000000;
   color: white;
   padding: 20px 0;
 }
@@ -56,11 +56,11 @@ header p {
 .artist-card h2 {
   margin: 15px 0 10px;
   font-size: 1.2rem;
-  color: #1db954;
+  color: #778899;
 }
 
 .artist-card button {
-  background-color: ##000000;
+  background-color: #000000;
   border: none;
   color: white;
   padding: 10px 20px;
