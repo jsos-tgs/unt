@@ -1,119 +1,70 @@
-/**
- * This is the main Node.js server script for your project
- * Check out the two endpoints this back-end API provides in fastify.get and fastify.post below
- */
-
+const express = require("express");
+const cors = require("cors");
 const path = require("path");
 
-// Require the fastify framework and instantiate it
-const fastify = require("fastify")({
-  // Set this to true for detailed logging:
-  logger: false,
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Servir les fichiers statiques
+app.use(express.static(path.join(__dirname, "public")));
+
+// Endpoint pour la page principale
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// ADD FAVORITES ARRAY VARIABLE FROM TODO HERE
-
-// Setup our static files
-fastify.register(require("@fastify/static"), {
-  root: path.join(__dirname, "public"),
-  prefix: "/", // optional: default '/'
+// Endpoint pour le jeu de l'artiste 1
+app.get("/artist1", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "artist1.html"));
 });
 
-// Formbody lets us parse incoming forms
-fastify.register(require("@fastify/formbody"));
-
-// View is a templating manager for fastify
-fastify.register(require("@fastify/view"), {
-  engine: {
-    handlebars: require("handlebars"),
-  },
+// Endpoint pour le jeu de l'artiste 2
+app.get("/artist2", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "artist2.html"));
 });
 
-// Load and parse SEO data
-const seo = require("./src/seo.json");
-if (seo.url === "glitch-default") {
-  seo.url = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
-}
+// Endpoint pour le jeu de l'artiste 3
+app.get("/artist3", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "artist3.html"));
+});
 
-/**
- * Our home page route
- *
- * Returns src/pages/index.hbs with data built into it
- */
-fastify.get("/", function (request, reply) {
-  // params is an object we'll pass to our handlebars template
-  let params = { seo: seo };
+// Endpoint pour récupérer les fichiers audio (si nécessaire)
+app.get("/audio-tracks/:artist", (req, res) => {
+  const { artist } = req.params;
 
-  // If someone clicked the option for a random color it'll be passed in the querystring
-  if (request.query.randomize) {
-    // We need to load our color data file, pick one at random, and add it to the params
-    const colors = require("./src/colors.json");
-    const allColors = Object.keys(colors);
-    let currentColor = allColors[(allColors.length * Math.random()) << 0];
+  // Exemple de gestion dynamique en fonction de l'artiste
+  const audioTracks = {
+    artist1: [
+      { title: "Track 1", file: "https://example.com/audio1.mp3" },
+      { title: "Track 2", file: "https://example.com/audio2.mp3" },
+    ],
+    artist2: [
+      { title: "Track A", file: "https://example.com/audioA.mp3" },
+      { title: "Track B", file: "https://example.com/audioB.mp3" },
+    ],
+    artist3: [
+      { title: "Track X", file: "https://example.com/audioX.mp3" },
+      { title: "Track Y", file: "https://example.com/audioY.mp3" },
+    ],
+  };
 
-    // Add the color properties to the params object
-    params = {
-      color: colors[currentColor],
-      colorError: null,
-      seo: seo,
-    };
+  if (audioTracks[artist]) {
+    res.json(audioTracks[artist]);
+  } else {
+    res.status(404).json({ error: "Artist not found" });
   }
-
-  // The Handlebars code will be able to access the parameter values and build them into the page
-  return reply.view("/src/pages/index.hbs", params);
 });
 
-/**
- * Our POST route to handle and react to form submissions
- *
- * Accepts body data indicating the user choice
- */
-fastify.post("/", function (request, reply) {
-  // Build the params object to pass to the template
-  let params = { seo: seo };
-
-  // If the user submitted a color through the form it'll be passed here in the request body
-  let color = request.body.color;
-
-  // If it's not empty, let's try to find the color
-  if (color) {
-    // ADD CODE FROM TODO HERE TO SAVE SUBMITTED FAVORITES
-
-    // Load our color data file
-    const colors = require("./src/colors.json");
-
-    // Take our form submission, remove whitespace, and convert to lowercase
-    color = color.toLowerCase().replace(/\s/g, "");
-
-    // Now we see if that color is a key in our colors object
-    if (colors[color]) {
-      // Found one!
-      params = {
-        color: colors[color],
-        colorError: null,
-        seo: seo,
-      };
-    } else {
-      // No luck! Return the user value as the error property
-      params = {
-        colorError: request.body.color,
-        seo: seo,
-      };
-    }
-  }
-
-  // The Handlebars template will use the parameter values to update the page with the chosen color
-  return reply.view("/src/pages/index.hbs", params);
+// Endpoint pour tester le serveur
+app.get("/ping", (req, res) => {
+  res.send("Server is running!");
 });
 
-// Run the server and report out to the logs
-fastify.listen(
-  { port: process.env.PORT, host: "0.0.0.0" },
-  function (err, address) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-    console.log(`Your app is listening on ${address}`);
-  }
-);
+// Démarrer le serveur
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
