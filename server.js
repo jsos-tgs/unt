@@ -63,6 +63,30 @@ app.get("/audio-tracks/:artist", (req, res) => {
 app.get("/ping", (req, res) => {
   res.send("Server is running!");
 });
+// Initialiser les compteurs pour chaque artiste
+const artistCounters = {
+  artist1: 10,
+  artist2: 10,
+};
+
+// Servir les fichiers statiques
+app.use(express.static(path.join(__dirname, "public")));
+
+// API pour récupérer les compteurs
+app.get("/counters", (req, res) => {
+  res.json(artistCounters);
+});
+
+// API pour diminuer le compteur
+app.post("/decrease-counter", (req, res) => {
+  const { artistId } = req.body;
+  if (artistCounters[artistId] !== undefined && artistCounters[artistId] > 0) {
+    artistCounters[artistId]--;
+    res.json({ success: true, newCount: artistCounters[artistId] });
+  } else {
+    res.status(400).json({ success: false, message: "Invalid artist ID or counter is already at 0." });
+  }
+});
 
 // Démarrer le serveur
 app.listen(PORT, () => {

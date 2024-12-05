@@ -14,4 +14,46 @@ function startGame(artist) {
     default:
       alert("Game not found!");
   }
+  // Charger les compteurs au chargement de la page
+async function loadCounters() {
+  const response = await fetch("/counters");
+  const counters = await response.json();
+  for (const artistId in counters) {
+    const counterElement = document.getElementById(`counter-${artistId}`);
+    if (counterElement) {
+      counterElement.textContent = counters[artistId];
+    }
+  }
+}
+
+// Diminuer le compteur pour un artiste
+async function decreaseCounter(artistId) {
+  const response = await fetch("/decrease-counter", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ artistId }),
+  });
+  const result = await response.json();
+  if (result.success) {
+    const counterElement = document.getElementById(`counter-${artistId}`);
+    if (counterElement) {
+      counterElement.textContent = result.newCount;
+    }
+  } else {
+    alert(result.message);
+  }
+}
+
+// Simuler le démarrage du jeu et la diminution du compteur
+function startGame(artistId) {
+  alert(`Starting game for ${artistId}`);
+  // Simuler qu'un joueur trouve le code
+  setTimeout(() => {
+    decreaseCounter(artistId);
+  }, 2000); // Exemple : diminue après 2 secondes
+}
+
+// Charger les compteurs au démarrage
+loadCounters();
+
 }
