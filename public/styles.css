@@ -74,25 +74,26 @@ header p {
 .artist-card button:hover {
   background-color: #17a249;
 }
- /* Compteurs fixes */
-    .fixed-counters {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+/* Compteurs fixes */
+.fixed-counters {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-    .counter {
-      background-color: red;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 50%;
-      font-size: 14px;
-      font-weight: bold;
-      text-align: center;
-    }
+.counter {
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  border: none; /* Pas de bordures */
+}
+
 /* Footer */
 footer {
   background-color: #333333;
