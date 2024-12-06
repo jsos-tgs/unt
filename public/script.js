@@ -5,7 +5,7 @@ function startGame(artist) {
     case "SHAY":
       window.location.href = "https://shaygame3-lk95.vercel.app/";
       break;
-    case "JOK'AIR":
+    case "JOKAIR":
       window.location.href = "https://jokairgame.vercel.app/";
       break;
     case "GAZO":
