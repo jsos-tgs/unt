@@ -24,7 +24,9 @@ app.get("/artist1", (req, res) => {
 
 // Endpoint pour le jeu de l'artiste 2
 app.get("/artist2", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "artist2.html"));
+  res.sendFile(
+    path.join(__dirname, "public", "https://jokairgame.vercel.app/")
+  );
 });
 
 // Endpoint pour le jeu de l'artiste 3
@@ -84,7 +86,12 @@ app.post("/decrease-counter", (req, res) => {
     artistCounters[artistId]--;
     res.json({ success: true, newCount: artistCounters[artistId] });
   } else {
-    res.status(400).json({ success: false, message: "Invalid artist ID or counter is already at 0." });
+    res
+      .status(400)
+      .json({
+        success: false,
+        message: "Invalid artist ID or counter is already at 0.",
+      });
   }
 });
 
