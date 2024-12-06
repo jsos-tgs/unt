@@ -9,7 +9,7 @@ function startGame(artist) {
       window.location.href = "https://jokairgame.vercel.app/";
       break;
     case "GAZO":
-      window.location.href = "artist3.html";
+      window.location.href = "https://gazogame.vercel.app/";
       break;
     default:
       alert("Game not found!");
